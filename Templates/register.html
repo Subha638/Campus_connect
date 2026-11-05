@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Register - CampusConnect{% endblock %}
+{% block content %}
+<div class="card form-card">
+  <h1>Student Registration</h1>
+  <form method="post">
+    <label>Full name</label><input type="text" name="name" required>
+    <label>Email</label><input type="email" name="email" required>
+    <label>Department</label><input type="text" name="department" placeholder="e.g. CSE">
+    <label>Password (min 6 characters)</label><input type="password" name="password" minlength="6" required>
+    <button class="btn" type="submit">Register</button>
+  </form>
+  <p class="hint">Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
+</div>
+{% endblock %}
