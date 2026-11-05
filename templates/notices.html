@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Notices - CampusConnect{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>Notice Board</h1><p class="sub">Official announcements from the college.</p></div>
+  {% if g.user and g.user['role']=='admin' %}<a class="btn" href="{{ url_for('notice_new') }}">+ New Notice</a>{% endif %}
+</div>
+<div class="filters">
+  <a href="{{ url_for('notices') }}" class="{{ '' if selected else 'active' }}">All</a>
+  {% for c in categories %}<a href="{{ url_for('notices', category=c) }}" class="{{ 'active' if selected==c else '' }}">{{ c }}</a>{% endfor %}
+</div>
+{% for n in notices %}
+  <div class="card">
+    <h3>{{ n['title'] }}</h3>
+    <div class="meta"><span class="tag">{{ n['category'] }}</span>Posted {{ n['created_at'] }}</div>
+    <div class="body-text">{{ n['body'] }}</div>
+    {% if g.user and g.user['role']=='admin' %}
+    <div class="actions">
+      <a class="btn outline small" href="{{ url_for('notice_edit', nid=n['id']) }}">Edit</a>
+      <form method="post" action="{{ url_for('notice_delete', nid=n['id']) }}" onsubmit="return confirm('Delete this notice?')">
+        <button class="btn danger small" type="submit">Delete</button>
+      </form>
+    </div>
+    {% endif %}
+  </div>
+{% else %}<div class="card empty">No notices found.</div>{% endfor %}
+{% endblock %}

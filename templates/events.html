@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Events - CampusConnect{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>Events</h1><p class="sub">Register for upcoming college events.</p></div>
+  {% if g.user and g.user['role']=='admin' %}<a class="btn" href="{{ url_for('event_new') }}">+ New Event</a>{% endif %}
+</div>
+{% for e in events %}
+  <div class="card">
+    <h3>{{ e['title'] }}</h3>
+    <div class="meta">{{ e['event_date'] }} &middot; {{ e['venue'] }} &middot; {{ e['total'] }} registered</div>
+    <div class="body-text">{{ e['description'] }}</div>
+    <div class="actions">
+      {% if g.user and g.user['role']!='admin' %}
+        {% if e['id'] in registered %}
+          <span class="tag found">Registered</span>
+          <form method="post" action="{{ url_for('event_unregister', eid=e['id']) }}"><button class="btn outline small" type="submit">Cancel registration</button></form>
+        {% else %}
+          <form method="post" action="{{ url_for('event_register', eid=e['id']) }}"><button class="btn small" type="submit">Register</button></form>
+        {% endif %}
+      {% elif not g.user %}
+        <a class="btn outline small" href="{{ url_for('login', next=request.path) }}">Login to register</a>
+      {% endif %}
+      {% if g.user and g.user['role']=='admin' %}
+        <a class="btn outline small" href="{{ url_for('event_registrations', eid=e['id']) }}">View registrations</a>
+        <a class="btn outline small" href="{{ url_for('event_edit', eid=e['id']) }}">Edit</a>
+        <form method="post" action="{{ url_for('event_delete', eid=e['id']) }}" onsubmit="return confirm('Delete this event?')"><button class="btn danger small" type="submit">Delete</button></form>
+      {% endif %}
+    </div>
+  </div>
+{% else %}<div class="card empty">No events yet.</div>{% endfor %}
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Notice - CampusConnect{% endblock %}
+{% block content %}
+<div class="card form-card">
+  <h1>{{ 'Edit' if notice else 'New' }} Notice</h1>
+  <form method="post">
+    <label>Title</label><input type="text" name="title" value="{{ notice['title'] if notice }}" required>
+    <label>Category</label>
+    <select name="category">
+      {% for c in categories %}<option {{ 'selected' if notice and notice['category']==c }}>{{ c }}</option>{% endfor %}
+    </select>
+    <label>Details</label><textarea name="body" required>{{ notice['body'] if notice }}</textarea>
+    <button class="btn" type="submit">{{ 'Save changes' if notice else 'Publish' }}</button>
+    <a class="btn outline" href="{{ url_for('notices') }}">Cancel</a>
+  </form>
+</div>
+{% endblock %}

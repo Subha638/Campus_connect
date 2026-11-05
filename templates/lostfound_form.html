@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Post Item - CampusConnect{% endblock %}
+{% block content %}
+<div class="card form-card">
+  <h1>Post an Item</h1>
+  <form method="post">
+    <label>Type</label>
+    <select name="kind"><option value="lost">I lost something</option><option value="found">I found something</option></select>
+    <label>Item name</label><input type="text" name="title" required>
+    <label>Description</label><textarea name="description" required></textarea>
+    <label>Location (where lost/found)</label><input type="text" name="location" required>
+    <label>Contact (phone or email)</label><input type="text" name="contact" required>
+    <button class="btn" type="submit">Post</button>
+    <a class="btn outline" href="{{ url_for('lostfound') }}">Cancel</a>
+  </form>
+</div>
+{% endblock %}
